@@ -13,12 +13,16 @@ function! s:OscyankPut(text)
   let encodedText=system(executeCmd)
   if $TMUX != ""
     " tmux
-    let executeCmd='echo -en "\033Ptmux;\033\033]52;;'.encodedText.'\033\033\\\\\033\\" > /dev/tty'
+    " let executeCmd='echo -en "\033Ptmux;\033\033]52;;'.encodedText.'\033\033\\\\\033\\" > /dev/tty'
+    let executeCmd='echo -en "\033Ptmux;\033\033]52;;\033\033\\\\\033\\\n\033Ptmux;\033\033]52;;'.encodedText.'\033\033\\\\\033\\" > /dev/tty'
   elseif $TERM == "screen"
     " screen
-    let executeCmd='echo -en "\033P\033]52;;'.encodedText.'\007\033\\" > /dev/tty'
+    " let executeCmd='echo -en "\033P\033]52;;'.encodedText.'\007\033\\" > /dev/tty'
+    " not test yet since i do not use screen
+    let executeCmd='echo -en "\033P\033]52;;\007\033\\\n\033P\033]52;;'.encodedText.'\007\033\\" > /dev/tty'
   else
-    let executeCmd='echo -en "\033]52;;'.encodedText.'\033\\" > /dev/tty'
+    " let executeCmd='echo -en "\033]52;;'.encodedText.'\033\\" > /dev/tty'
+    let executeCmd='echo -en "\033]52;;\033\\\n\033]52;;'.encodedText.'\033\\" > /dev/tty'
   endif
   call system(executeCmd)
   redraw!
